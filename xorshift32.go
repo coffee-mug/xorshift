@@ -2,6 +2,9 @@ package main
 
 import (
   "fmt"
+  "image"
+  "image/png"
+  "os"
 )
 
 // state must be initialized ot non-zero
@@ -46,10 +49,31 @@ func xorshift128plus(fst, snd uint64) uint64 {
   return s[1] + y
 }
 
-func main() {
+func createImage() {
+  myImage := image.NewRGBA(image.Rect(0, 0, 300, 600))
+
+  // Feed the pixels with random values
+  // One pixel takes up four bytes/uint8. One for each RGBA
+
+  // PRNG function
   st := uint32(10)
   xor := xorshift32(&st)
-  for i := 0; i < 10; i++ {
-    fmt.Printf("%d \r\n", uint8(xor()))
+
+  for i := 0; i < 180000; i++ {
+    myImage.Pix[i] = uint8(xor())
   }
+
+  outputFile, err := os.Create("test.png")
+  defer outputFile.Close()
+
+  if err != nil {
+    fmt.Println("Something bad happened mate", err)
+  }
+
+
+  png.Encode(outputFile, myImage)
+}
+
+func main() {
+  createImage()
 }
