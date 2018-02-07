@@ -1,4 +1,4 @@
-package main
+package xorshift32
 
 import (
   "fmt"
@@ -7,11 +7,12 @@ import (
   "os"
 )
 
-// state must be initialized ot non-zero
+// Xorshift32 returns a 32bits random number
+// State must be initialized ot non-zero
 // the wikipedia C version uses a static variable
 // we use a closure to mimic this.
 // Marsaglia recommended numbers for uint32: 13, 17, 5
-func xorshift32(state *uint32) func() uint32 {
+func Xorshift32(state *uint32) func() uint32 {
   var x uint32
   return func() uint32 {
     x = *state
@@ -50,14 +51,14 @@ func xorshift128plus(fst, snd uint64) uint64 {
 }
 
 func createImage() {
-  myImage := image.NewRGBA(image.Rect(0, 0, 300, 600))
+  myImage := image.NewNRGBA(image.Rect(0, 0, 300, 600))
 
   // Feed the pixels with random values
   // One pixel takes up four bytes/uint8. One for each RGBA
 
   // PRNG function
   st := uint32(10)
-  xor := xorshift32(&st)
+  xor := Xorshift32(&st)
 
   for i := 0; i < 180000; i++ {
     myImage.Pix[i] = uint8(xor())
