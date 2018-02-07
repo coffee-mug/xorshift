@@ -3,13 +3,14 @@ package main
 import (
   "image"
   "image/png"
+  "image/color"
   "os"
   "log"
   "github.com/xoroshiro128plus/xorshift32"
 )
 
 func main() {
-  inFile, err := os.Open("out2.png")
+  inFile, err := os.Open("out.png")
   defer inFile.Close()
   if err != nil {
     log.Fatal(err)
@@ -41,7 +42,7 @@ func main() {
     }
   }
 
-  f, err := os.Create("out3.png")
+  f, err := os.Create("in2.png")
   if err != nil {
     log.Fatal()
   }
